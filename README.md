@@ -200,6 +200,6 @@ All requests go through the gateway on port `8080`.
 
 ## Author
 
-**Aziz Reja** — 3rd year CSE student at Jadavpur University
+**Aziz Reja** — 3rd year student at Jadavpur University
 GitHub: [@AzizReja10](https://github.com/AzizReja10)
 LeetCode: [AzizReja](https://leetcode.com/AzizReja)
