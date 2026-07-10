@@ -17,7 +17,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // Hardcoded public paths — no @Value injection needed
     private static final List<String> PUBLIC_PATHS = List.of(
             "/auth/login",
             "/auth/register/customer",
@@ -25,6 +24,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             "/auth/register/restaurant-owner",
             "/actuator",
             "/deliveries/partners/available"
+    );
+
+    // Paths that require ADMIN role
+    private static final List<String> ADMIN_PATHS = List.of(
+            "/users/admin"
     );
 
     @Override
@@ -35,6 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
+        // Skip JWT validation for public endpoints
         if (isPublicPath(path)) {
             filterChain.doFilter(request, response);
             return;
@@ -60,6 +65,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String role = jwtUtil.extractRole(token);
         String email = jwtUtil.extractEmail(token);
 
+        // Check admin-only endpoints
+        if (isAdminPath(path) && !"ADMIN".equals(role)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Access denied — Admin role required");
+            return;
+        }
+
         MutableHttpServletRequest mutableRequest =
                 new MutableHttpServletRequest(request);
         mutableRequest.putHeader("X-User-ID", String.valueOf(userId));
@@ -77,5 +89,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             return path.startsWith(publicPath);
         });
+    }
+
+    private boolean isAdminPath(String path) {
+        return ADMIN_PATHS.stream().anyMatch(path::startsWith);
     }
 }

@@ -18,10 +18,16 @@ public class UserController {
     {
         this.userService=userService;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long id)
     {
         return userService.getUserById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/admin/allUser")
+    public ResponseEntity<List<UserResponse>> getAllUser()
+    {
+        return ResponseEntity.ok(userService.getUser()) ;
     }
     // Internal endpoint — called by other services via Feign
     @GetMapping("/internal/{id}")

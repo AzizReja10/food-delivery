@@ -66,6 +66,10 @@ public class UserService {
     {
         return userRepo.findById(id).map(this::mapToUserResponse);
     }
+    public List<UserResponse> getUser()
+    {
+        return userRepo.findAll().stream().map(this::mapToUserResponse).toList();
+    }
  public UserResponse updateRole(Long id,UserRole role)
  {
      User user=userRepo.findById(id) .orElseThrow(() -> new RuntimeException("User not found"));
