@@ -59,7 +59,11 @@ public class UserController {
         log.info("Add address request: userId={}", id);
         return ResponseEntity.ok(userService.addAddress(id, request));
     }
-
+@GetMapping("admin/allUsers")
+public ResponseEntity<?> getAllUsers()
+{
+    return ResponseEntity.ok(userService.getUser());
+}
     @GetMapping("/{id}/addresses")
     public ResponseEntity<List<AddressResponse>> getAddresses(
             @PathVariable Long id) {

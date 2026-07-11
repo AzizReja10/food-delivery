@@ -6,6 +6,7 @@ import com.fooddelivery.delivery.entity.DeliveryPartner;
 import com.fooddelivery.delivery.entity.DeliveryStatus;
 import com.fooddelivery.delivery.repository.DeliveryPartnerRepo;
 import com.fooddelivery.delivery.repository.DeliveryRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class DeliveryService {
 
@@ -100,7 +102,7 @@ public class DeliveryService {
         if (!delivery.getPartnerId().equals(partner.getId())) {
             throw new RuntimeException("Unauthorized");
         }
-
+        log.info("ok");
         delivery.setStatus(status);
 
         if (status == DeliveryStatus.PICKED_UP) {
