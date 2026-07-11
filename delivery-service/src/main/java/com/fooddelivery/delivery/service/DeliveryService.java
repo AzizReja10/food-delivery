@@ -93,7 +93,6 @@ public class DeliveryService {
                                          Long userId) {
         Delivery delivery = deliveryRepo.findById(deliveryId)
                 .orElseThrow(() -> new RuntimeException("Delivery not found"));
-
         // Find partner by userId (X-User-ID from gateway)
         DeliveryPartner partner = partnerRepo.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Partner not found"));
